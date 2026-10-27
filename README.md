@@ -14,6 +14,10 @@ python src/analysis.py
 ```
 Run the tests with `python -m pytest -q` from this folder.
 
+The analysis command saves six chart images and chart-specific takeaways under
+`reports/` after validating and cleaning the input. The takeaways describe
+associations in this synthetic sample, not causal effects.
+
 ## Folder map
 | Path | Purpose |
 |---|---|

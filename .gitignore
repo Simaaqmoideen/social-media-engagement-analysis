@@ -10,4 +10,10 @@ data/*
 !data/sample_movies.csv
 models/
 reports/*.png
+!reports/engagement_distribution.png
+!reports/by_type.png
+!reports/by_hour.png
+!reports/by_weekday.png
+!reports/by_n_tags.png
+!reports/by_hashtag.png
 .DS_Store

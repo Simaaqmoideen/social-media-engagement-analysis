@@ -1,6 +1,8 @@
 from src.analysis import engagement_rate, extract_hashtags
 from src.clean import clean_posts
+from src.charts import engagement_groups, rank_posts
 import pandas as pd
+from src.analysis import load
 
 
 def test_engagement_rate():
@@ -42,3 +44,17 @@ def test_clean_posts_drops_negative_count_rows():
         "likes": [-1], "comments": [0], "shares": [0],
     })
     assert clean_posts(posts).empty
+
+
+def test_required_group_totals_match_analyzed_posts():
+    posts = load()
+    groups = engagement_groups(posts)
+    for key in ["post_type", "hour", "weekday", "hashtag_count"]:
+        assert int(groups[key]["count"].sum()) == len(posts)
+
+
+def test_post_rankings_include_ten_distinct_top_and_bottom_posts():
+    ranked = rank_posts(load())
+    assert ranked["ranking"].value_counts().to_dict() == {"Top": 10, "Bottom": 10}
+    assert ranked["post_id"].nunique() == 20
+    assert ranked["descriptive_context"].notna().all()

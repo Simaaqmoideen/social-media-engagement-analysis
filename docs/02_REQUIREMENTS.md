@@ -5,12 +5,12 @@
 ### Must have
 - [x] Load posts data (date, type, caption, likes, comments, shares, followers)
 - [x] Compute engagement rate = (likes + comments + shares) / followers; use zero for zero followers
-- [ ] Analyse by post type, hour of day, day of week and hashtag
-- [ ] At least 5 clear charts and a written list of insights
+- [x] Analyse by post type, hour of day, day of week and hashtag
+- [x] At least 5 clear charts and a written list of insights
 
 ### Should have
 - [ ] Sentiment analysis of captions or comments (VADER)
-- [ ] Top and bottom 10 posts with reasons
+- [x] Top and bottom 10 posts with descriptive context
 - [ ] Simple regression to rank drivers of engagement
 - [ ] Interactive dashboard
 
