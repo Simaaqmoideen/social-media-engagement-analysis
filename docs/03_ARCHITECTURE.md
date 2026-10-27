@@ -17,6 +17,9 @@ Posts CSV (real export or synthetic)
  src/text_analysis.py -> hashtag and caption summaries + charts
         |
         v
+ src/model.py -> baseline comparison, held-out regression metrics
+        |
+        v
  (optional) dashboard.py
 ```
 

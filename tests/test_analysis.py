@@ -2,7 +2,9 @@ from src.analysis import engagement_rate, extract_hashtags
 from src.clean import clean_posts
 from src.charts import engagement_groups, rank_posts
 from src.text_analysis import text_summaries
+from src.model import evaluate_regression
 import pandas as pd
+from pathlib import Path
 from src.analysis import load
 
 
@@ -68,3 +70,13 @@ def test_text_summaries_cover_tagged_occurrences_and_all_caption_groups():
     assert hashtag_summary["post_count"].sum() == tagged_occurrences
     assert set(caption_summary.index.astype(str)) == {"0-4 words", "5-9 words", "10+ words"}
     assert caption_summary["post_count"].sum() == len(posts)
+
+
+def test_regression_uses_holdout_and_reports_baseline():
+    output = Path("reports")
+    result = evaluate_regression(load(), output)
+    assert result["train_rows"] == 480
+    assert result["test_rows"] == 120
+    assert result["metrics"]["model"].tolist() == ["training_mean_baseline", "linear_regression"]
+    assert set(result["drivers"]["feature_group"]) == {"hour", "n_tags", "caption_words", "type", "weekday"}
+    assert (output / "regression_evaluation.md").exists()

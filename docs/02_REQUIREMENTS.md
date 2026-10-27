@@ -11,7 +11,7 @@
 ### Should have
 - [ ] Sentiment analysis of captions or comments (VADER)
 - [x] Top and bottom 10 posts with descriptive context
-- [ ] Simple regression to rank drivers of engagement
+- [x] Simple regression to rank drivers of engagement
 - [ ] Interactive dashboard
 
 ### Could have (stretch)

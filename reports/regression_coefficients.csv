@@ -1,0 +1,15 @@
+feature,coefficient,feature_group
+numeric__hour,0.0067213176062253166,hour
+numeric__n_tags,0.004121153776746466,n_tags
+numeric__caption_words,9.430664492382295e-05,caption_words
+categorical__type_carousel,0.006103989818340236,type
+categorical__type_image,-0.008417898647872814,type
+categorical__type_text,-0.02362456805888294,type
+categorical__type_video,0.025938476888415506,type
+categorical__weekday_Friday,0.0033391708454755895,weekday
+categorical__weekday_Monday,-0.0029418063232772144,weekday
+categorical__weekday_Saturday,-0.0029879671387644693,weekday
+categorical__weekday_Sunday,0.005883200615701106,weekday
+categorical__weekday_Thursday,-0.0031849586382715206,weekday
+categorical__weekday_Tuesday,-0.0014502941632944053,weekday
+categorical__weekday_Wednesday,0.0013426548024309292,weekday

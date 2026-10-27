@@ -12,6 +12,7 @@ python src/generate_data.py
 python src/clean.py
 python src/analysis.py
 python src/text_analysis.py
+python src/model.py
 ```
 Run the tests with `python -m pytest -q` from this folder.
 
@@ -20,6 +21,8 @@ The analysis command saves six chart images and chart-specific takeaways under
 associations in this synthetic sample, not causal effects.
 The text-analysis command writes hashtag frequency and caption-length summaries
 and charts to `reports/`.
+The modeling command compares a mean baseline with linear regression on a held-out
+test split and writes metrics and coefficient summaries to `reports/`.
 
 ## Folder map
 | Path | Purpose |
