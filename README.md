@@ -11,12 +11,15 @@ pip install -r requirements.txt
 python src/generate_data.py
 python src/clean.py
 python src/analysis.py
+python src/text_analysis.py
 ```
 Run the tests with `python -m pytest -q` from this folder.
 
 The analysis command saves six chart images and chart-specific takeaways under
 `reports/` after validating and cleaning the input. The takeaways describe
 associations in this synthetic sample, not causal effects.
+The text-analysis command writes hashtag frequency and caption-length summaries
+and charts to `reports/`.
 
 ## Folder map
 | Path | Purpose |

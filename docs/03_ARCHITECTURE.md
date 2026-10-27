@@ -14,6 +14,9 @@ Posts CSV (real export or synthetic)
  src/charts.py -> reports/*.png + reports/chart_takeaways.md
         |
         v
+ src/text_analysis.py -> hashtag and caption summaries + charts
+        |
+        v
  (optional) dashboard.py
 ```
 

@@ -16,4 +16,6 @@ reports/*.png
 !reports/by_weekday.png
 !reports/by_n_tags.png
 !reports/by_hashtag.png
+!reports/hashtag_text.png
+!reports/caption_length.png
 .DS_Store

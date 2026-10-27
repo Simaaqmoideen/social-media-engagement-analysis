@@ -1,6 +1,7 @@
 from src.analysis import engagement_rate, extract_hashtags
 from src.clean import clean_posts
 from src.charts import engagement_groups, rank_posts
+from src.text_analysis import text_summaries
 import pandas as pd
 from src.analysis import load
 
@@ -58,3 +59,12 @@ def test_post_rankings_include_ten_distinct_top_and_bottom_posts():
     assert ranked["ranking"].value_counts().to_dict() == {"Top": 10, "Bottom": 10}
     assert ranked["post_id"].nunique() == 20
     assert ranked["descriptive_context"].notna().all()
+
+
+def test_text_summaries_cover_tagged_occurrences_and_all_caption_groups():
+    posts = load()
+    hashtag_summary, caption_summary = text_summaries(posts)
+    tagged_occurrences = sum(len(tags) for tags in posts["hashtags"].apply(extract_hashtags))
+    assert hashtag_summary["post_count"].sum() == tagged_occurrences
+    assert set(caption_summary.index.astype(str)) == {"0-4 words", "5-9 words", "10+ words"}
+    assert caption_summary["post_count"].sum() == len(posts)
