@@ -152,7 +152,7 @@ Run the automated suite from the project root:
 python -m pytest -q
 ```
 
-The tests cover the engagement formula, zero-follower handling, hashtag extraction, cleaning rules, group-count reconciliation, ranking distinctness, text summaries, and regression holdout outputs.
+The tests cover the engagement formula, zero-follower handling, VADER caption labels, hashtag extraction, cleaning rules, group-count reconciliation, ranking distinctness, text summaries, and regression holdout outputs.
 
 ## Limitations and responsible use
 

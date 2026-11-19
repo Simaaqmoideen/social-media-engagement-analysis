@@ -7,7 +7,7 @@
 - [x] Interactive dashboard
 
 ## Quality gate
-- [ ] Runs from a clean clone using only the README commands
+- [x] Runs from a clean clone using the README commands
 - [x] All tests pass
 - [x] No secrets or large data files in Git
 - [x] README includes results
@@ -15,5 +15,5 @@
 - [x] Demo presented in the running Streamlit dashboard
 
 VADER caption sentiment is implemented with positive, neutral, and negative
-labels. The clean-clone workflow is being verified before checking the final
-quality gate.
+labels. A fresh clone successfully installed `requirements.txt`, generated and
+analyzed the sample dataset, and passed all 10 tests.
