@@ -11,6 +11,7 @@ The following results describe the included 600-post synthetic dataset. They are
 - Posts with three hashtags have the highest mean by hashtag-count group (7.24%, 123 posts). The `#ai` group has the highest per-hashtag mean (7.06%, 148 occurrences).
 - Captions of 5–9 words have a 6.75% mean rate (102 posts), compared with 6.20% for 0–4 words (498 posts). There are no 10+ word captions in this generated sample.
 - The regression improved test MAE from 0.02318 for the training-mean baseline to 0.01782 on a 120-post holdout. Type, hour and hashtag count had the largest grouped absolute standardized coefficients. R² was 0.3927.
+- VADER classified the 600 captions as 192 negative, 211 neutral, and 197 positive. Mean engagement ranged from 6.26% for negative to 6.33% for positive labels, a small descriptive difference in this synthetic sample.
 
 ## Recommendations to validate
 
@@ -19,6 +20,7 @@ The following results describe the included 600-post synthetic dataset. They are
 3. **Compare hashtag counts in matched posts.** Test three relevant tags against the account's usual number while holding format and topic as steady as possible; the observed 3-tag mean was highest in this dataset.
 4. **Trial concise captions.** Compare short and 5–9 word captions on similar posts, since the 5–9 word group had a higher synthetic mean. The generated sample has no long captions, so it cannot inform longer-copy performance.
 5. **Use a controlled weekly schedule test.** The Sunday mean was highest, but weekday composition, content and sample sizes may differ. Rotate comparable content across days before changing the calendar.
+6. **Treat sentiment as a caption-writing diagnostic only.** VADER groups were close in mean engagement (6.26%–6.33%) and may miss sarcasm or context; validate labels and avoid inferring a real audience's feelings from short text.
 
 ## Interpretation limits
 

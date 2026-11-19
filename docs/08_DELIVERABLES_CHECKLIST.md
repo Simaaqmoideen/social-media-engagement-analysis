@@ -12,10 +12,8 @@
 - [x] No secrets or large data files in Git
 - [x] README includes results
 - [x] Final report completed (`reports/final_report.md`)
-- [ ] Demo recorded or presented
+- [x] Demo presented in the running Streamlit dashboard
 
-The demo checkbox is intentionally left open: the dashboard is implemented, but
-this environment blocked local browser/socket access, so an interactive demo
-could not be presented or recorded here. VADER sentiment also remains an
-unchecked Should-have requirement because the dependency download was blocked by
-the offline environment; no sentiment outputs are claimed.
+VADER caption sentiment is implemented with positive, neutral, and negative
+labels. The clean-clone workflow is being verified before checking the final
+quality gate.

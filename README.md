@@ -23,6 +23,7 @@ An exploratory analytics project for understanding how post format, publishing t
 - Validate and clean posts while retaining a separate raw input file.
 - Calculate engagement rate as `(likes + comments + shares) / followers`, with zero for zero followers.
 - Explore engagement across post type, hour, weekday, hashtag count, hashtags, and caption length.
+- Classify captions as positive, neutral, or negative with VADER and compare average engagement by label.
 - Create six EDA charts with sample-aware takeaways and top/bottom post rankings.
 - Compare a linear regression with a training-mean baseline on a seeded holdout set.
 - Filter an interactive dashboard by post type and publication date.
@@ -69,7 +70,7 @@ On macOS or Linux, activate the environment with `source .venv/bin/activate` ins
 streamlit run dashboard.py
 ```
 
-The dashboard opens in a browser. Use the sidebar to filter by post type and publication date, then explore engagement summaries, text summaries, and observed top/bottom posts. Generate the dataset and analysis outputs first using the quick-start commands.
+The dashboard opens in a browser. Use the sidebar to filter by post type and publication date, then explore engagement summaries, text and sentiment summaries, and observed top/bottom posts. Generate the dataset and analysis outputs first using the quick-start commands.
 
 ## Sample results
 
@@ -82,12 +83,14 @@ These measured values are from the generated 600-post dataset and one seeded 80/
 | Middle 50% of engagement rates | 4.08%–7.74% |
 | Highest mean format | Video: 8.54% (`n=187`) |
 | Highest observed posting hour | 18:00: 10.25% (`n=21`) |
+| VADER caption labels | 192 negative, 211 neutral, 197 positive |
+| Mean engagement by sentiment label | 6.26% negative, 6.29% neutral, 6.33% positive |
 | Baseline test MAE | 0.02318 |
 | Regression test MAE | 0.01782 |
 | Regression test RMSE | 0.02263 |
 | Regression test R² | 0.3927 |
 
-The regression beat the mean baseline on this holdout. The result is a demo measurement on synthetic data, not a guarantee of predictive performance on real posts.
+The regression beat the mean baseline on this holdout. The sentiment means are close together. All results are demo measurements on synthetic data, not guarantees about real posts.
 
 ## Charts
 
@@ -99,11 +102,17 @@ The regression beat the mean baseline on this holdout. The result is a demo meas
 |---|---|
 | ![Mean engagement by posting hour](reports/by_hour.png) | ![Mean engagement by number of hashtags](reports/by_n_tags.png) |
 
+| Caption length | VADER caption sentiment |
+|---|---|
+| ![Mean engagement by caption length](reports/caption_length.png) | ![Mean engagement by VADER sentiment](reports/caption_sentiment.png) |
+
 More charts and results:
 
 - [Weekday chart](reports/by_weekday.png)
 - [Hashtag chart](reports/by_hashtag.png)
 - [Caption length chart](reports/caption_length.png)
+- [Caption sentiment chart](reports/caption_sentiment.png)
+- [Caption sentiment summary](reports/caption_sentiment_summary.csv)
 - [Chart-specific takeaways](reports/chart_takeaways.md)
 - [Hashtag and caption summaries](reports/text_analysis_summary.md)
 - [Regression evaluation](reports/regression_evaluation.md)
@@ -112,7 +121,7 @@ More charts and results:
 
 ## Method and interpretation
 
-Engagement rate is calculated per post using the project formula above. The regression predicts engagement rate from post type, weekday, posting hour, hashtag count, and caption word count. One-hot encoding and scaling are fitted inside the training pipeline; results are evaluated on a held-out set and compared with a baseline that predicts the training-set mean.
+Engagement rate is calculated per post using the project formula above. The regression predicts engagement rate from post type, weekday, posting hour, hashtag count, and caption word count. One-hot encoding and scaling are fitted inside the training pipeline; results are evaluated on a held-out set and compared with a baseline that predicts the training-set mean. Caption sentiment uses VADER's compound score: values at or above `0.05` are positive, values at or below `-0.05` are negative, and values between them are neutral.
 
 Group averages and regression coefficients describe associations. They do not establish that changing a format, posting time, or caption will cause engagement to change. A low sample count can make a group mean unstable; chart labels include group sizes for context.
 
@@ -126,6 +135,7 @@ Group averages and regression coefficients describe associations. They do not es
 │   ├── analysis.py            # Engagement features and chart entry point
 │   ├── charts.py              # EDA visualizations and rankings
 │   ├── text_analysis.py       # Hashtag and caption summaries
+│   ├── sentiment.py           # VADER compound scores and labels
 │   └── model.py               # Baseline and regression evaluation
 ├── tests/                     # Unit and analysis tests
 ├── data/                      # Local data; generated files are git-ignored
@@ -148,7 +158,7 @@ The tests cover the engagement formula, zero-follower handling, hashtag extracti
 
 - The generated posts are simulated, not a sample of a real platform or audience.
 - The synthetic generator deliberately encodes patterns; this project does not claim real-world causal or forecasting performance.
-- VADER sentiment is listed as an optional dependency but was not run in the reported results.
+- VADER is lexicon-based and may misread sarcasm, context, and domain-specific language; it is a descriptive feature, not a measure of a person's true feelings.
 - For real data, use only account exports you are authorized to analyze, remove personal identifiers, and follow the relevant platform terms and data-protection requirements.
 
 Review [project risks and ethics](docs/07_RISKS_ETHICS.md) before using account data.

@@ -1,9 +1,16 @@
-"""Optional: VADER sentiment for captions/comments."""
+"""VADER sentiment scoring and labels for short social media captions."""
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-_an = SentimentIntensityAnalyzer()
+_analyzer = SentimentIntensityAnalyzer()
 
 
-def label(text: str) -> str:
-    s = _an.polarity_scores(text)["compound"]
-    return "positive" if s >= 0.05 else "negative" if s <= -0.05 else "neutral"
+def compound_score(text: object) -> float:
+    """Return VADER's compound score, treating missing values as neutral text."""
+    value = text if isinstance(text, str) else ""
+    return float(_analyzer.polarity_scores(value)["compound"])
+
+
+def label(text: object) -> str:
+    """Classify text using VADER's standard compound-score thresholds."""
+    score = compound_score(text)
+    return "positive" if score >= 0.05 else "negative" if score <= -0.05 else "neutral"

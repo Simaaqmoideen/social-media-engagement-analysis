@@ -1,8 +1,9 @@
 from src.analysis import engagement_rate, extract_hashtags
 from src.clean import clean_posts
 from src.charts import engagement_groups, rank_posts
-from src.text_analysis import text_summaries
+from src.text_analysis import text_summaries, caption_sentiment_summary
 from src.model import evaluate_regression
+from src.sentiment import label
 import pandas as pd
 from pathlib import Path
 from src.analysis import load
@@ -70,6 +71,16 @@ def test_text_summaries_cover_tagged_occurrences_and_all_caption_groups():
     assert hashtag_summary["post_count"].sum() == tagged_occurrences
     assert set(caption_summary.index.astype(str)) == {"0-4 words", "5-9 words", "10+ words"}
     assert caption_summary["post_count"].sum() == len(posts)
+
+
+def test_vader_caption_labels_and_summary_cover_all_posts():
+    assert label("Loved building this!") == "positive"
+    assert label("This is terrible, avoid") == "negative"
+    assert label("") == "neutral"
+    summary = caption_sentiment_summary(load())
+    assert set(summary.index) <= {"negative", "neutral", "positive"}
+    assert summary["post_count"].sum() == 600
+    assert summary["mean_compound"].between(-1, 1).all()
 
 
 def test_regression_uses_holdout_and_reports_baseline():

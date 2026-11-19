@@ -14,7 +14,7 @@ Posts CSV (real export or synthetic)
  src/charts.py -> reports/*.png + reports/chart_takeaways.md
         |
         v
- src/text_analysis.py -> hashtag and caption summaries + charts
+ src/text_analysis.py -> hashtag, caption-length, and sentiment summaries + charts
         |
         v
  src/model.py -> baseline comparison, held-out regression metrics

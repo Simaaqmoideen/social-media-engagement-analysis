@@ -14,6 +14,7 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(ROOT))
 
 from src.analysis import extract_hashtags
+from src.sentiment import compound_score, label as sentiment_label
 
 
 def text_summaries(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -36,6 +37,17 @@ def text_summaries(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     return hashtag_summary, caption_summary
 
 
+def caption_sentiment_summary(df: pd.DataFrame) -> pd.DataFrame:
+    """Summarize VADER caption labels, compound scores, and engagement."""
+    captions = df.assign(
+        sentiment=df["caption"].apply(sentiment_label),
+        compound=df["caption"].apply(compound_score),
+    )
+    summary = captions.groupby("sentiment")["er"].agg(mean_er="mean", post_count="count")
+    summary["mean_compound"] = captions.groupby("sentiment")["compound"].mean()
+    return summary.reindex(["negative", "neutral", "positive"]).dropna(subset=["post_count"])
+
+
 def _bar(summary: pd.DataFrame, label: str, title: str, output: Path) -> None:
     plotted = summary.sort_values("mean_er", ascending=False)
     names = [f"{key} (n={int(count)})" for key, count in zip(plotted.index, plotted["post_count"])]
@@ -55,19 +67,23 @@ def analyze_text(df: pd.DataFrame, output_dir: Path) -> list[str]:
     """Write text summaries and figures; return measured observations."""
     output_dir.mkdir(parents=True, exist_ok=True)
     hashtag_summary, caption_summary = text_summaries(df)
+    sentiment_summary = caption_sentiment_summary(df)
     hashtag_summary.to_csv(output_dir / "hashtag_text_summary.csv")
     caption_summary.to_csv(output_dir / "caption_length_summary.csv")
+    sentiment_summary.to_csv(output_dir / "caption_sentiment_summary.csv")
     _bar(hashtag_summary.head(10), "Hashtag", "Mean engagement for 10 most-used hashtags", output_dir / "hashtag_text.png")
     _bar(caption_summary, "Caption length", "Mean engagement by caption length", output_dir / "caption_length.png")
+    _bar(sentiment_summary, "Caption sentiment", "Mean engagement by VADER caption sentiment", output_dir / "caption_sentiment.png")
 
     observations = [
         f"{len(hashtag_summary)} unique hashtags appear; {int(hashtag_summary['post_count'].sum())} tagged-post occurrences were counted.",
         f"Most common hashtag is {hashtag_summary.index[0]} (n={int(hashtag_summary.iloc[0]['post_count'])}; mean ER {hashtag_summary.iloc[0]['mean_er']:.2%})." if len(hashtag_summary) else "No hashtags were present.",
         f"Caption length is measured in words; {int(df['caption'].fillna('').str.split().str.len().median())} words is the median.",
+        f"VADER sentiment labels: {', '.join(f'{sentiment} {int(row.post_count)}' for sentiment, row in sentiment_summary.iterrows())}.",
     ]
     lines = ["# Text analysis", "", "Hashtag and caption patterns are descriptive associations in this dataset; they do not show that text causes engagement.", ""]
     lines.extend(f"- {observation}" for observation in observations)
-    lines.extend(["", "## Hashtag engagement", "", "![Mean engagement by common hashtag](./hashtag_text.png)", "", "## Caption length", "", "![Mean engagement by caption length](./caption_length.png)", ""])
+    lines.extend(["", "## Hashtag engagement", "", "![Mean engagement by common hashtag](./hashtag_text.png)", "", "## Caption length", "", "![Mean engagement by caption length](./caption_length.png)", "", "## Caption sentiment", "", "VADER uses compound-score thresholds of -0.05 and +0.05. These lexicon-based labels can miss context, sarcasm, and domain-specific language.", "", "![Mean engagement by caption sentiment](./caption_sentiment.png)", ""])
     (output_dir / "text_analysis_summary.md").write_text("\n".join(lines), encoding="utf-8")
     return observations
 

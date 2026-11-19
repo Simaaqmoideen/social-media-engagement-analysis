@@ -2,11 +2,11 @@
 
 ## 1. Title, author, date
 
-**Social Media Engagement Analysis** · Author: project contributor (name not supplied) · 2026-10-27
+**Social Media Engagement Analysis** · Author: project contributor (name not supplied) · 2026-11-20
 
 ## 2. Abstract
 
-This project explores how post format, timing and text relate to social-media engagement. The reproducible workflow generated and cleaned 600 synthetic posts, calculated engagement rate, and created descriptive charts, text summaries and a lightweight regression. Video posts had the highest mean synthetic engagement rate at 8.54%, while the observed peak hour was 18:00 at 10.25% across 21 posts. On a seeded 120-post holdout, linear regression achieved MAE 0.01782 compared with 0.02318 for a training-mean baseline. Because the data is synthetic and encodes patterns by construction, the findings validate the workflow rather than establish advice for a real account.
+This project explores how post format, timing and text relate to social-media engagement. The reproducible workflow generated and cleaned 600 synthetic posts, calculated engagement rate, and created descriptive charts, text and sentiment summaries, and a lightweight regression. Video posts had the highest mean synthetic engagement rate at 8.54%, while the observed peak hour was 18:00 at 10.25% across 21 posts. VADER classified 197 captions as positive, 211 as neutral, and 192 as negative. On a seeded 120-post holdout, linear regression achieved MAE 0.01782 compared with 0.02318 for a training-mean baseline. Because the data is synthetic and encodes patterns by construction, the findings validate the workflow rather than establish advice for a real account.
 
 ## 3. Introduction
 
@@ -22,7 +22,7 @@ Creators and social-media teams need a consistent way to summarize interaction r
 
 ## 5. Method
 
-Engagement rate is `(likes + comments + shares) / followers`, with zero for zero followers. The workflow reports means with sample counts by type, hour, weekday, hashtag count and hashtag; measures caption length in words; and ranks observed top/bottom posts with context. A linear regression uses post type, weekday, hour, hashtag count and caption word count to predict engagement rate. It is compared with a training-mean `DummyRegressor` on an 80/20 seeded random holdout (480 training, 120 test). Preprocessing is fit within the training pipeline. No VADER sentiment score is reported because its package was unavailable in the offline build environment.
+Engagement rate is `(likes + comments + shares) / followers`, with zero for zero followers. The workflow reports means with sample counts by type, hour, weekday, hashtag count and hashtag; measures caption length in words; classifies caption sentiment using VADER compound-score thresholds (-0.05 and +0.05); and ranks observed top/bottom posts with context. A linear regression uses post type, weekday, hour, hashtag count and caption word count to predict engagement rate. It is compared with a training-mean `DummyRegressor` on an 80/20 seeded random holdout (480 training, 120 test). Preprocessing is fit within the training pipeline.
 
 ## 6. Results
 
@@ -35,13 +35,15 @@ Engagement rate is `(likes + comments + shares) / followers`, with zero for zero
 | Highest observed hour | 18:00: 10.25% (n=21) |
 | Highest weekday mean | Sunday: 6.67% (n=74) |
 | Highest hashtag-count mean | 3 tags: 7.24% (n=123) |
+| VADER caption labels | Negative: 192; neutral: 211; positive: 197 |
+| Mean engagement by VADER label | Negative: 6.26%; neutral: 6.29%; positive: 6.33% |
 
 | Holdout model | MAE | RMSE | R² |
 |---|---:|---:|---:|
 | Training-mean baseline | 0.02318 | 0.02904 | -0.0006 |
 | Linear regression | 0.01782 | 0.02263 | 0.3927 |
 
-The regression’s grouped coefficient magnitudes ranked post type, hour and hashtag count highest. These values are model associations, not causal effects. See [chart takeaways](chart_takeaways.md), [regression evaluation](regression_evaluation.md), and [experiment ideas](../INSIGHTS.md).
+The regression’s grouped coefficient magnitudes ranked post type, hour and hashtag count highest. These values are model associations, not causal effects. Sentiment groups have similar mean engagement in this sample and should not be overinterpreted. See [chart takeaways](chart_takeaways.md), [text analysis](text_analysis_summary.md), [regression evaluation](regression_evaluation.md), and [experiment ideas](../INSIGHTS.md).
 
 ## 7. Discussion
 
@@ -53,13 +55,13 @@ Use only data the account owner is authorized to analyze. Remove usernames and p
 
 ## 9. Future work
 
-Evaluate on consented, anonymized account exports; compare across time with suitable time-based evaluation if forecasting becomes a goal; obtain and verify VADER before optional sentiment analysis; and pre-register controlled content experiments.
+Evaluate on consented, anonymized account exports; compare across time with suitable time-based evaluation if forecasting becomes a goal; compare VADER labels against human-annotated captions; and pre-register controlled content experiments.
 
 ## 10. References
 
 - Project synthetic dataset generator: `src/generate_data.py`.
 - pandas, NumPy, Matplotlib, scikit-learn, Streamlit and pytest are listed in `requirements.txt`.
-- VADER sentiment is listed as an optional dependency in the starter requirements but was not run in this environment.
+- VADER sentiment uses the `vaderSentiment` package listed in `requirements.txt`; results are lexicon-based estimates.
 
 ## 11. Appendix
 

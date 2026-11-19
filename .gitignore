@@ -18,4 +18,8 @@ reports/*.png
 !reports/by_hashtag.png
 !reports/hashtag_text.png
 !reports/caption_length.png
+!reports/caption_sentiment.png
+.streamlit/
+streamlit.stdout.log
+streamlit.stderr.log
 .DS_Store

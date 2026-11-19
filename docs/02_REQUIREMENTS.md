@@ -9,7 +9,7 @@
 - [x] At least 5 clear charts and a written list of insights
 
 ### Should have
-- [ ] Sentiment analysis of captions or comments (VADER)
+- [x] Sentiment analysis of captions (VADER)
 - [x] Top and bottom 10 posts with descriptive context
 - [x] Simple regression to rank drivers of engagement
 - [x] Interactive dashboard
